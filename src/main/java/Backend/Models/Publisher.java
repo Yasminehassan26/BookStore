@@ -8,6 +8,7 @@ import java.util.List;
 public class Publisher {
     private String name;
     private String address;
-    private List<String> telephoneNumbers;
+    private String telephoneNumbers;
 
 }
+

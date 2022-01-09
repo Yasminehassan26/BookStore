@@ -15,7 +15,7 @@ public class Book {
     private int numberOfCopies;
     private Publisher publisher;
     private Category category;
-    private List<Author> authors;
+    private List<String> authors;
     private String publicationDate;
 
 }
