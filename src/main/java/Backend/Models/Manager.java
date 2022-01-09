@@ -6,28 +6,28 @@ import java.util.List;
 
 public class Manager extends User {
 
-    public boolean promoteUser(int UserId) {
-        return false;
+    public void promoteUser(int UserId) throws SQLException {
+    	BookStore.databaseManager.executeQuery("UPDATE USER SET privilege = 'true' ");
     }
 
     public void addNewBook(Book book) throws SQLException {
 
         BookStore.databaseManager.executeQuery("INSERT INTO BOOK VALUES('" + book.getISBN()
-                + "','" + book.getTitle() + "','" + book.getPublicationDate() + "','" + book.getPrice() + "','" + book.getCategory() +
-                "','" + book.getNumberOfCopies() + "','" + book.getThreshold() + "','" + book.getPublisher().getName() +
+                + "','" + book.getTitle() + "','" + book.getPublisher().getName() + "','" + book.getPublicationDate() + "','" + book.getCategory() +
+                "','" + book.getPrice() + "','" + book.getThreshold() + "','" + book.getNumberOfCopies() +
                 "')");
     }
 
 
     public void modifyBook(Book book) throws SQLException {
-        BookStore.databaseManager.executeQuery("UPDATE BOOK SET title = '" + book.getTitle() + "',Publication_Year = '" + book.getPublicationDate() + "',Selling_Price = '" + book.getPrice() + "',Category = '" + book.getCategory() +
-                "',Quantity = '" + book.getNumberOfCopies() + "',Threshold = '" + book.getThreshold() + "',Publisher_Name = '" + book.getPublisher().getName() + "' WHERE ISBN = " + book.getISBN()
+        BookStore.databaseManager.executeQuery("UPDATE BOOK SET title = '" + book.getTitle() + "',Publication_Year = '" + book.getPublicationDate() + "',Price = '" + book.getPrice() + "',Category = '" + book.getCategory() +
+                "',Quantity = '" + book.getNumberOfCopies() + "',Threashold = '" + book.getThreshold() + "',Publisher = '" + book.getPublisher().getName() + "' WHERE ISBN = " + book.getISBN()
         );
     }
 
 
     /**
-     * place orders and confirm orders
+     * The total sales for books in the previous month 
      */
 
     public int getPrevMonthSales() {
