@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Test {
     public static void main(String[] args) throws SQLException {
-        DatabaseManager db = DatabaseManager.getInstance("root", "MariomaMD2410");
+        DatabaseManager db = DatabaseManager.getInstance("root", "");
         Connection c = db.getConnection();
         ResultSet r = db.executeQuery("SELECT * FROM BOOK;");
 //        while (r.next())
