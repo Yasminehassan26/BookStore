@@ -135,4 +135,38 @@ public class User {
         }
 				return true;
 	}
+	public boolean signIn(String username, String password) throws SQLException {
+		ResultSet result = BookStore.databaseManager
+				.executeQuery("select username,password from user where username='" + username + "'");
+		result.next();
+		try {
+			if (result.getString("password").equals(password))
+				return true;
+			else
+				return false;
+		} catch (SQLException e) {
+			return false;
+		}
+	}
+
+	public int signUp(UserBasicInfo new_user) throws SQLException {
+		ResultSet result = BookStore.databaseManager
+				.executeQuery("select username from user where username='" + new_user.getUsername() + "'");
+		if (result.next())
+			return -1; // username is taken
+		ResultSet result1 = BookStore.databaseManager
+				.executeQuery("select username from user where email='" + new_user.getEmail() + "'");
+		if (result1.next())
+			return -2; // email is taken
+		try {
+			BookStore.databaseManager.executeQuery("insert into USER values (default,'" + new_user.getUsername() + "','"
+					+ new_user.getPassword() + "','" + new_user.getFirstName() + "','" + new_user.getLastName() + "','"
+					+ new_user.getEmail() + "','" + new_user.getPhoneNumber() + "','" + new_user.getShippingAddress()
+					+ "',0)");
+			return 0;
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			return -3; // error in query ex: data input is invalid
+		}
+	}
 }
