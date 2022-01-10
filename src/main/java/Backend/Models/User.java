@@ -20,6 +20,13 @@ public class User {
     private String shippingAddress;
     private Cart cart = new Cart();
 
+    public int getPrivilege() throws SQLException {
+        ResultSet result = BookStore.databaseManager
+                .executeQuery("select Privilege from user where username = '" + this.getUsername() + "'");
+        result.next();
+        return result.getInt("Privilege");
+    }
+
     public void editPersonalInfo(UserBasicInfo user) throws SQLException {
         BookStore.databaseManager.executeQuery("UPDATE USER SET UserName = '" + user.getUsername()
                 + "',Password = '" + user.getPassword() + "',First_Name = '" + user.getFirstName() + "',Last_Name = '" + user.getLastName() + "',Email = '" + user.getEmail() +
@@ -169,10 +176,9 @@ public class User {
             try {
                 BookStore.databaseManager.executeQuery("CALL confirmOrderItems(" + orderId +
                         "," + entry.getKey().getISBN() + "," + entry.getValue() + ")");
-            }
-            catch (SQLException e) {
-                if (e.getMessage().equals("Quantity in Stock is less than zero")){
-                    BookStore.databaseManager.executeQuery("CALL DeleteOrder ("+ orderId +")");
+            } catch (SQLException e) {
+                if (e.getMessage().equals("Quantity in Stock is less than zero")) {
+                    BookStore.databaseManager.executeQuery("CALL DeleteOrder (" + orderId + ")");
                     break;
                 }
             }
@@ -181,7 +187,7 @@ public class User {
     }
 
     public boolean confirmOrder(int orderId) throws SQLException {
-        BookStore.databaseManager.executeQuery("CALL confirmOrder("+ orderId+")");
+        BookStore.databaseManager.executeQuery("CALL confirmOrder(" + orderId + ")");
         return true;
     }
 
@@ -191,15 +197,16 @@ public class User {
         return true;
     }
 
-    private boolean isValidExpiryDate(Date expiryDate){
+    private boolean isValidExpiryDate(Date expiryDate) {
         Date current = new Date(System.currentTimeMillis());
         if (current.before(expiryDate)) return true;
         return false;
     }
-    private boolean isValidCardNumber (String cardNumber){
+
+    private boolean isValidCardNumber(String cardNumber) {
         if (cardNumber.length() != 16) return false;
-        for (int i = 0; i<cardNumber.length();i++){
-            if (! Character.isDigit(cardNumber.charAt(i))){
+        for (int i = 0; i < cardNumber.length(); i++) {
+            if (!Character.isDigit(cardNumber.charAt(i))) {
                 return false;
             }
         }
