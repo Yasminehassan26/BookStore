@@ -22,14 +22,21 @@ public class Manager extends User {
     public void addNewBook(Book book) throws SQLException {
         BookStore.databaseManager.executeQuery("CALL add_book("+book.getISBN()+",'"+book.getTitle()+
                 "','"+book.getPublicationDate()+"',"+book.getPrice()+",'"+book.getCategory()+"',"+book.getNumberOfCopies()
-                +","+book.getThreshold()+",'"+book.getPublisher()+"')");
+                +","+book.getThreshold()+",'"+book.getPublisher().getName()+"')");
     }
 
 
-    public void modifyBook(Book book) throws SQLException {
-        BookStore.databaseManager.executeQuery("UPDATE BOOK SET title = '" + book.getTitle() + "',Publication_Year = '" + book.getPublicationDate() + "',Price = '" + book.getPrice() + "',Category = '" + book.getCategory() +
-                "',Quantity = '" + book.getNumberOfCopies() + "',Threashold = '" + book.getThreshold() + "',Publisher = '" + book.getPublisher() + "' WHERE ISBN = " + book.getISBN()
-        );
+    public boolean modifyBook(Book book) throws SQLException {
+        try {
+            BookStore.databaseManager.executeQuery("UPDATE BOOK SET Title = '" + book.getTitle() + "',Publication_Year = '" + book.getPublicationDate() + "',Price = '" + book.getPrice() + "',Category = '" + book.getCategory() +
+                    "',Quantity = '" + book.getNumberOfCopies() + "',Threashold = '" + book.getThreshold() + "',Publisher = '" + book.getPublisher().getName() + "' WHERE ISBN = '" + book.getISBN() + "'"
+            );
+
+        } catch (SQLException e) {
+            if (e.getMessage().equals("Quantity in Stock is less than zero"))
+                return false;
+        }
+        return true;
     }
 
     /**
