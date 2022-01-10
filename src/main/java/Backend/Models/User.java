@@ -4,8 +4,8 @@ import lombok.Data;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Data
 public class User {
@@ -18,14 +18,13 @@ public class User {
 	private String email;
 	private String phoneNumber;
 	private String shippingAddress;
-	private Cart shoppingCart;
+    private Cart cart = new Cart();
 
 	public void editPersonalInfo(UserBasicInfo user) throws SQLException {
-		BookStore.databaseManager.executeQuery("UPDATE USER SET UserName = '" + user.getUsername() + "',Password = '"
-				+ user.getPassword() + "',First_Name = '" + user.getFirstName() + "',Last_Name = '" + user.getLastName()
-				+ "',Email = '" + user.getEmail() + "',Phone_Number = '" + user.getPhoneNumber()
-				+ "',Shipping_Address = '" + user.getShippingAddress() + "',privilege = " + user.getPrivilege()
-				+ " WHERE User_id = " + user.getId());
+        BookStore.databaseManager.executeQuery("UPDATE USER SET UserName = '" + user.getUsername()
+                + "',Password = '" + user.getPassword() + "',First_Name = '" + user.getFirstName() + "',Last_Name = '" + user.getLastName() + "',Email = '" + user.getEmail() +
+                "',Phone_Number = '" + user.getPhoneNumber() + "',Shipping_Address = '" + user.getShippingAddress() + "',privilege = " + user.getPrivilege() +
+                " WHERE User_id = " + user.getId());
 	}
 
 	private Book mapToBook(ResultSet result) throws SQLException {
@@ -108,38 +107,32 @@ public class User {
 		return books;
 	}
 
-	public boolean signIn(String username, String password) throws SQLException {
-		ResultSet result = BookStore.databaseManager
-				.executeQuery("select username,password from user where username='" + username + "'");
-		result.next();
-		try {
-			if (result.getString("password").equals(password))
-				return true;
-			else
-				return false;
-		} catch (SQLException e) {
-			return false;
-		}
-	}
+    public void addToCart (Book book){
+        cart.addBook(book);
+    }
 
-	public int signUp(UserBasicInfo new_user) throws SQLException {
-		ResultSet result = BookStore.databaseManager
-				.executeQuery("select username from user where username='" + new_user.getUsername() + "'");
-		if (result.next())
-			return -1; // username is taken
-		ResultSet result1 = BookStore.databaseManager
-				.executeQuery("select username from user where email='" + new_user.getEmail() + "'");
-		if (result1.next())
-			return -2; // email is taken
-		try {
-			BookStore.databaseManager.executeQuery("insert into USER values (default,'" + new_user.getUsername() + "','"
-					+ new_user.getPassword() + "','" + new_user.getFirstName() + "','" + new_user.getLastName() + "','"
-					+ new_user.getEmail() + "','" + new_user.getPhoneNumber() + "','" + new_user.getShippingAddress()
-					+ "',0)");
-			return 0;
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-			return -3; // error in query ex: data input is invalid
-		}
+    public void removeFromCart(Book book){
+        cart.removeBook(book);
+    }
+
+    public HashMap<Book, Integer> listInCart(){
+        return cart.viewCart();
+    }
+
+    public double totalCartCost(){
+        return cart.getTotalPrice();
+    }
+
+    public boolean placeOrder () throws SQLException {
+        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date(System.currentTimeMillis());
+        ResultSet resultSet = BookStore.databaseManager.executeQuery("CALL addCustomerOrder( "+ id + ",'" + formatter.format(date) + "'," + cart.getTotalPrice() + " )");
+        resultSet.next();
+        for (Map.Entry<Book, Integer> entry:
+             cart.getBooks().entrySet()) {
+            BookStore.databaseManager.executeQuery("INSERT INTO order_items values (" + resultSet.getInt("LAST_INSERT_ID()") + ","
+                    + entry.getKey().getISBN() + "," + entry.getValue() + ")");
+        }
+				return true;
 	}
 }

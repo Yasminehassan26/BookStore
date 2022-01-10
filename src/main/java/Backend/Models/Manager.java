@@ -12,11 +12,11 @@ public class Manager extends User {
     }
 
     public static ResultSet getPublisher(String publisherName) throws SQLException {
-        return BookStore.databaseManager.executeQuery("CALL getPublisher("+publisherName+")");
+        return BookStore.databaseManager.executeQuery("CALL getPublisher('"+publisherName+"')");
     }
 
-    public void promoteUser(int UserId) throws SQLException {
-        BookStore.databaseManager.executeQuery("UPDATE USER SET privilege = 'true' ");
+    public void promoteUser(String userName) throws SQLException {
+        BookStore.databaseManager.executeQuery("UPDATE USER SET privilege = '1' WHERE username = '" + userName +"'");
     }
 
     public void addNewBook(Book book) throws SQLException {
@@ -28,9 +28,8 @@ public class Manager extends User {
 
     public boolean modifyBook(Book book) throws SQLException {
         try {
-            BookStore.databaseManager.executeQuery("UPDATE BOOK SET Title = '" + book.getTitle() + "',Publication_Year = '" + book.getPublicationDate() + "',Price = '" + book.getPrice() + "',Category = '" + book.getCategory() +
-                    "',Quantity = '" + book.getNumberOfCopies() + "',Threashold = '" + book.getThreshold() + "',Publisher = '" + book.getPublisher().getName() + "' WHERE ISBN = '" + book.getISBN() + "'"
-            );
+            BookStore.databaseManager.executeQuery("UPDATE BOOK SET Title = '" + book.getTitle() + "',Publisher = '" + book.getPublisher().getName() + "',Publication_year = '" + book.getPublicationDate() + "',Category = '" + book.getCategory() +
+                    "',Price = " + book.getPrice() + ",Threashold = " + book.getThreshold() + ",Quantity = " + book.getNumberOfCopies() + " WHERE ISBN = " + book.getISBN()            );
 
         } catch (SQLException e) {
             if (e.getMessage().equals("Quantity in Stock is less than zero"))
