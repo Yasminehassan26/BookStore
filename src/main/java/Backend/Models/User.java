@@ -180,7 +180,7 @@ public class User {
             } catch (SQLException e) {
                 if (e.getMessage().equals("Quantity in Stock is less than zero")) {
                     BookStore.databaseManager.executeQuery("CALL DeleteOrder (" + orderId + ")");
-                    break;
+                    return false;
                 }
             }
         }
