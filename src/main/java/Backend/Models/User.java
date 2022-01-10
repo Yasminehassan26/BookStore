@@ -27,6 +27,41 @@ public class User {
                 " WHERE User_id = " + user.getId());
     }
 
+    public boolean signIn(String username, String password) throws SQLException {
+        ResultSet result = BookStore.databaseManager
+                .executeQuery("select username,password from user where username='" + username + "'");
+        result.next();
+        try {
+            if (result.getString("password").equals(password))
+                return true;
+            else
+                return false;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    public int signUp(UserBasicInfo new_user) throws SQLException {
+        ResultSet result = BookStore.databaseManager
+                .executeQuery("select username from user where username='" + new_user.getUsername() + "'");
+        if (result.next())
+            return -1; // username is taken
+        ResultSet result1 = BookStore.databaseManager
+                .executeQuery("select username from user where email='" + new_user.getEmail() + "'");
+        if (result1.next())
+            return -2; // email is taken
+        try {
+            BookStore.databaseManager.executeQuery("insert into USER values (default,'" + new_user.getUsername() + "','"
+                    + new_user.getPassword() + "','" + new_user.getFirstName() + "','" + new_user.getLastName() + "','"
+                    + new_user.getEmail() + "','" + new_user.getPhoneNumber() + "','" + new_user.getShippingAddress()
+                    + "',0)");
+            return 0;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return -3; // error in query ex: data input is invalid
+        }
+    }
+
     private Book mapToBook(ResultSet result) throws SQLException {
         Book add = new Book();
         int ISBN = result.getInt("ISBN");
@@ -128,46 +163,46 @@ public class User {
         Date date = new Date(System.currentTimeMillis());
         ResultSet resultSet = BookStore.databaseManager.executeQuery("CALL addCustomerOrder( " + id + ",'" + formatter.format(date) + "'," + cart.getTotalPrice() + " )");
         resultSet.next();
+        int orderId = resultSet.getInt("LAST_INSERT_ID()");
         for (Map.Entry<Book, Integer> entry :
                 cart.getBooks().entrySet()) {
-            BookStore.databaseManager.executeQuery("INSERT INTO order_items values (" + resultSet.getInt("LAST_INSERT_ID()") + ","
-                    + entry.getKey().getISBN() + "," + entry.getValue() + ")");
+            try {
+                BookStore.databaseManager.executeQuery("CALL confirmOrderItems(" + orderId +
+                        "," + entry.getKey().getISBN() + "," + entry.getValue() + ")");
+            }
+            catch (SQLException e) {
+                if (e.getMessage().equals("Quantity in Stock is less than zero")){
+                    BookStore.databaseManager.executeQuery("CALL DeleteOrder ("+ orderId +")");
+                    break;
+                }
+            }
         }
         return true;
     }
 
-    public boolean signIn(String username, String password) throws SQLException {
-        ResultSet result = BookStore.databaseManager
-                .executeQuery("select username,password from user where username='" + username + "'");
-        result.next();
-        try {
-            if (result.getString("password").equals(password))
-                return true;
-            else
-                return false;
-        } catch (SQLException e) {
-            return false;
-        }
+    public boolean confirmOrder(int orderId) throws SQLException {
+        BookStore.databaseManager.executeQuery("CALL confirmOrder("+ orderId+")");
+        return true;
     }
 
-    public int signUp(UserBasicInfo new_user) throws SQLException {
-        ResultSet result = BookStore.databaseManager
-                .executeQuery("select username from user where username='" + new_user.getUsername() + "'");
-        if (result.next())
-            return -1; // username is taken
-        ResultSet result1 = BookStore.databaseManager
-                .executeQuery("select username from user where email='" + new_user.getEmail() + "'");
-        if (result1.next())
-            return -2; // email is taken
-        try {
-            BookStore.databaseManager.executeQuery("insert into USER values (default,'" + new_user.getUsername() + "','"
-                    + new_user.getPassword() + "','" + new_user.getFirstName() + "','" + new_user.getLastName() + "','"
-                    + new_user.getEmail() + "','" + new_user.getPhoneNumber() + "','" + new_user.getShippingAddress()
-                    + "',0)");
-            return 0;
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            return -3; // error in query ex: data input is invalid
+    public boolean checkout(String cardNumber, Date expiryDate) throws SQLException {
+        if (isValidExpiryDate(expiryDate) && isValidCardNumber(cardNumber))
+            placeOrder();
+        return true;
+    }
+
+    private boolean isValidExpiryDate(Date expiryDate){
+        Date current = new Date(System.currentTimeMillis());
+        if (current.before(expiryDate)) return true;
+        return false;
+    }
+    private boolean isValidCardNumber (String cardNumber){
+        if (cardNumber.length() != 16) return false;
+        for (int i = 0; i<cardNumber.length();i++){
+            if (! Character.isDigit(cardNumber.charAt(i))){
+                return false;
+            }
         }
+        return true;
     }
 }
