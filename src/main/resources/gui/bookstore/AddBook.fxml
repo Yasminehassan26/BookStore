@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="545.0" prefWidth="420.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.bookstore.AddBookController">
+    <children>
+        <ImageView fitHeight="673.0" fitWidth="618.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@pictures/book.jpg" />
+            </image>
+        </ImageView>
+        <Label layoutX="14.0" layoutY="14.0" prefHeight="56.0" prefWidth="303.0" text="Fill book info:">
+            <font>
+                <Font name="Century Schoolbook Bold Italic" size="39.0" />
+            </font>
+        </Label>
+        <Label layoutX="30.0" layoutY="91.0" prefHeight="56.0" prefWidth="43.0" text="Title:" textFill="#110101">
+            <font>
+                <Font name="System Italic" size="16.0" />
+            </font>
+        </Label>
+        <Label layoutX="30.0" layoutY="427.0" prefHeight="56.0" prefWidth="86.0" text="Authors" textFill="#110101">
+            <font>
+                <Font name="System Italic" size="16.0" />
+            </font>
+        </Label>
+        <Label layoutX="24.0" layoutY="203.0" prefHeight="56.0" prefWidth="70.0" text="Publisher" textFill="#110101">
+            <font>
+                <Font name="System Italic" size="16.0" />
+            </font>
+        </Label>
+        <Label layoutX="24.0" layoutY="147.0" prefHeight="56.0" prefWidth="54.0" text=" ISBN" textFill="#110101">
+            <font>
+                <Font name="System Italic" size="16.0" />
+            </font>
+        </Label>
+        <Label layoutX="24.0" layoutY="251.0" prefHeight="56.0" prefWidth="70.0" text="Price" textFill="#110101">
+            <font>
+                <Font name="System Italic" size="16.0" />
+            </font>
+        </Label>
+        <Label layoutX="24.0" layoutY="303.0" prefHeight="56.0" prefWidth="86.0" text="Category" textFill="#110101">
+            <font>
+                <Font name="System Italic" size="16.0" />
+            </font>
+        </Label>
+        <Label layoutX="24.0" layoutY="351.0" prefHeight="56.0" prefWidth="135.0" text="Publication Date:" textFill="#110101">
+            <font>
+                <Font name="System Italic" size="16.0" />
+            </font>
+        </Label>
+      <Pane layoutX="21.0" layoutY="483.0" prefHeight="178.0" prefWidth="553.0">
+         <children>
+            <Button layoutX="22.0" layoutY="77.0" mnemonicParsing="false" onAction="#addAuthor" prefHeight="25.0" prefWidth="89.0" text="Add Author" />
+            <TextField fx:id="input" layoutX="14.0" layoutY="111.0" prefHeight="25.0" prefWidth="220.0" />
+            <Label layoutX="427.0" layoutY="100.0" prefHeight="17.0" prefWidth="133.0" text="Click to delete receiver" />
+            <Label fx:id="warning" layoutX="563.0" layoutY="113.0" prefHeight="40.0" prefWidth="200.0" textFill="#d01212">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Button layoutX="445.0" layoutY="123.0" mnemonicParsing="false" onAction="#deleteAuthor" text="Delete Author" />
+      
+              <ListView fx:id="list" layoutX="243.0" layoutY="4.0" prefHeight="170.0" prefWidth="171.0" />
+         </children>
+      </Pane>
+      <TextField fx:id="title" layoutX="86.0" layoutY="103.0" prefHeight="32.0" prefWidth="160.0" />
+      <TextField fx:id="isbn" layoutX="86.0" layoutY="159.0" prefHeight="32.0" prefWidth="160.0" />
+      <TextField fx:id="publisher" layoutX="94.0" layoutY="215.0" prefHeight="32.0" prefWidth="160.0" />
+      <TextField fx:id="price" layoutX="73.0" layoutY="263.0" prefHeight="32.0" prefWidth="70.0" />
+      <TextField fx:id="category" layoutX="94.0" layoutY="315.0" prefHeight="32.0" prefWidth="133.0" />
+      <TextField fx:id="date" layoutX="152.0" layoutY="363.0" prefHeight="32.0" prefWidth="133.0" />
+      <Button layoutX="421.0" layoutY="29.0" mnemonicParsing="false" onAction="#loadBook" prefHeight="26.0" prefWidth="86.0" text="Save" />
+      <Label fx:id="warning" layoutX="388.0" layoutY="70.0" prefHeight="17.0" prefWidth="151.0" textFill="#110101">
+         <font>
+            <Font name="System Italic" size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="306.0" layoutY="91.0" prefHeight="56.0" prefWidth="100.0" text="Quantity:" textFill="#110101">
+         <font>
+            <Font name="System Italic" size="16.0" />
+         </font>
+      </Label>
+      <TextField fx:id="copies" layoutX="406.0" layoutY="103.0" prefHeight="32.0" prefWidth="70.0" />
+      <Label layoutX="306.0" layoutY="147.0" prefHeight="56.0" prefWidth="100.0" text="Threshold:" textFill="#110101">
+         <font>
+            <Font name="System Italic" size="16.0" />
+         </font>
+      </Label>
+      <TextField fx:id="threshold" layoutX="406.0" layoutY="159.0" prefHeight="32.0" prefWidth="70.0" />
+    </children>
+</AnchorPane>

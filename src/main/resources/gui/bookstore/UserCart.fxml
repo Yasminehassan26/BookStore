@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="516.0" prefWidth="872.0" style="-fx-background-color: #f6f1ec;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.bookstore.UserCartController">
+    <children>
+        <ImageView fitHeight="556.0" fitWidth="878.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@pictures/571A7607.jpg" />
+         </image></ImageView>
+
+        <TableView fx:id="table" layoutX="61.0" layoutY="99.0" onMouseClicked="#show" prefHeight="323.0" prefWidth="486.0">
+            <columns>
+                <TableColumn fx:id="Select" prefWidth="74.39999008178711" text="Select" />
+                <TableColumn fx:id="Quantity" prefWidth="124.00001525878906" text="Quantity" />
+                <TableColumn fx:id="Book" prefWidth="148.00006103515625" text="Book" />
+                <TableColumn fx:id="ISPN" minWidth="0.0" prefWidth="139.20001220703125" text="ISPN" />
+            </columns>
+        </TableView>        <Label layoutX="14.0" layoutY="14.0" prefHeight="56.0" prefWidth="204.0" text="Orders:">
+            <font>
+                <Font name="Century Schoolbook Bold Italic" size="39.0" />
+            </font>
+        </Label>
+        <Button layoutX="61.0" layoutY="433.0" mnemonicParsing="false" onAction="#deleteItems" prefHeight="32.0" prefWidth="98.0" style="-fx-background-color: transparent; -fx-border-color: black;" text="Delete item">
+            <font>
+                <Font name="Century Schoolbook Bold" size="12.0" />
+            </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+        </Button>
+      <Label fx:id="totalPrice" layoutX="293.0" layoutY="471.0" prefHeight="40.0" prefWidth="128.0" textFill="#110101">
+         <font>
+            <Font name="System Italic" size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="177.0" layoutY="463.0" prefHeight="56.0" prefWidth="97.0" text="Total Price :" textFill="RED">
+         <font>
+            <Font name="System Italic" size="16.0" />
+         </font>
+      </Label>
+      <Button layoutX="464.0" layoutY="433.0" mnemonicParsing="false" onAction="#okCredit" style="-fx-background-color: transparent; -fx-border-color: black;" text="Confirm">
+         <font>
+            <Font name="Century Schoolbook Italic" size="15.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Label fx:id="labelDelete" layoutX="177.0" layoutY="433.0" prefHeight="32.0" prefWidth="185.0" textFill="RED">
+         <font>
+            <Font name="System Italic" size="16.0" />
+         </font>
+      </Label>
+      <Button layoutX="408.0" layoutY="475.0" mnemonicParsing="false" onAction="#refreshPrice" prefHeight="32.0" prefWidth="38.0" style="-fx-background-color: transparent; -fx-border-color: black;" text="ok">
+         <font>
+            <Font name="Century Schoolbook Bold" size="12.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <TextField fx:id="credit" layoutX="200.0" layoutY="42.0" promptText="credit" />
+      <TextField fx:id="expireDate" layoutX="380.0" layoutY="42.0" promptText="date" />
+    </children>
+</AnchorPane>
