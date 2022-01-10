@@ -20,19 +20,20 @@ public class User {
     private String shippingAddress;
     private Cart cart = new Cart();
 
-    public int getPrivilege() throws SQLException {
-        ResultSet result = BookStore.databaseManager
-                .executeQuery("select Privilege from user where username = '" + this.getUsername() + "'");
-        result.next();
-        return result.getInt("Privilege");
-    }
+	public int getPrivilege() throws SQLException {
+		ResultSet result = BookStore.databaseManager
+				.executeQuery("select Privilege from user where username = '" + this.getUsername() + "'");
+		result.next();
+		return result.getInt("Privilege");
+	}
 
-    public void editPersonalInfo(UserBasicInfo user) throws SQLException {
-        BookStore.databaseManager.executeQuery("UPDATE USER SET UserName = '" + user.getUsername()
-                + "',Password = '" + user.getPassword() + "',First_Name = '" + user.getFirstName() + "',Last_Name = '" + user.getLastName() + "',Email = '" + user.getEmail() +
-                "',Phone_Number = '" + user.getPhoneNumber() + "',Shipping_Address = '" + user.getShippingAddress() + "',privilege = " + user.getPrivilege() +
-                " WHERE User_id = " + user.getId());
-    }
+	public void editPersonalInfo(UserBasicInfo user) throws SQLException {
+		BookStore.databaseManager.executeQuery("UPDATE USER SET UserName = '" + user.getUsername() + "',Password = '"
+				+ user.getPassword() + "',First_Name = '" + user.getFirstName() + "',Last_Name = '" + user.getLastName()
+				+ "',Email = '" + user.getEmail() + "',Phone_Number = '" + user.getPhoneNumber()
+				+ "',Shipping_Address = '" + user.getShippingAddress() + "',privilege = " + user.getPrivilege()
+				+ " WHERE User_id = " + user.getId());
+	}
 
     public boolean signIn(String username, String password) throws SQLException {
         ResultSet result = BookStore.databaseManager
